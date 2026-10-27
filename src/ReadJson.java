@@ -101,7 +101,17 @@ public class ReadJson {
             //todo:print out all of the starships
             org.json.simple.JSONArray starships = (org.json.simple.JSONArray) jsonObject.get("starships");
             for (int i = 0; i < starships.size(); i++) {
-                System.out.println(starships.get(i));
+                URL starshipUrl = new URL((String) starships.get(i));
+                HttpURLConnection starshipConn = (HttpURLConnection) starshipUrl.openConnection();
+                BufferedReader starshipBr = new BufferedReader(new InputStreamReader(starshipConn.getInputStream()));
+
+                totlaJson = "";
+                while ((output = starshipBr.readLine()) != null) {
+                    totlaJson += output;
+                }
+
+                org.json.simple.JSONObject ship = (org.json.simple.JSONObject) parser.parse(totlaJson);
+                System.out.println(ship.get("name"));
             }
 
 
